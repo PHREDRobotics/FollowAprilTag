@@ -4,13 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.SwerveJoystickCmd;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.controls.LogitechPro;
+import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,16 +22,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+   // Define Joysticks
+   private final LogitechPro joyStick = new LogitechPro(1);
+   // Replace with CommandPS4Controller or CommandJoystick if needed
+   private final XboxController driverJoystick = new XboxController(0);
+  
+  // Define subsystems
+   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(joyStick);
+   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    
     configureBindings();
+    
   }
 
   /**
@@ -43,13 +51,25 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
+        // Define triggers
+    Trigger xButton = new JoystickButton(driverJoystick, Constants.OIConstants.kXButton);
+    Trigger yButton = new JoystickButton(driverJoystick, Constants.OIConstants.kYButton);
+    Trigger aButton = new JoystickButton(driverJoystick, Constants.OIConstants.kAButton);
+    Trigger bButton = new JoystickButton(driverJoystick, Constants.OIConstants.kBButton);
+    Trigger leftBumper = new JoystickButton(driverJoystick, Constants.OIConstants.kLeftBumper);
+    Trigger rightBumper = new JoystickButton(driverJoystick, Constants.OIConstants.kRightBumper);
+    Trigger startButton = new JoystickButton(driverJoystick, Constants.OIConstants.kStartButton);
+    
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+        swerveSubsystem,
+        () -> joyStick.getBackToFront(),
+        () -> joyStick.getLeftToRight(),
+        () -> joyStick.getYaw(),
+        () -> swerveSubsystem.throttleAdjust(joyStick.getThrottle()),
+        () -> joyStick.getTrigger()));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-  }
+   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -57,7 +77,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return null;
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
   }
 }
