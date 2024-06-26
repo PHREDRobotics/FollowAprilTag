@@ -1,6 +1,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +25,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.controls.LogitechPro;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -87,6 +90,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public ProfiledPIDController thetaController = new ProfiledPIDController(
       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
 
+  
+  TrajectoryConfig config = new TrajectoryConfig(1, .5);
+
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
         frontLeft.getPosition(),
@@ -147,7 +153,15 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Trajectory getGoToTrajectory(Pose2d targetWaypoint, Pose2d secondPoint) {
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(), AutoConstants.trajectoryConfig);
+    
+    var start = targetWaypoint;
+    var end = secondPoint;
+
+    var waypoints = new ArrayList<Pose2d>();
+    waypoints.add(start);
+    waypoints.add(end);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, AutoConstants.trajectoryConfig);
+
     return trajectory;
   }
 

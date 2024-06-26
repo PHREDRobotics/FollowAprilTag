@@ -193,7 +193,7 @@ public final class Constants {
     public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
     public static final double kPXController = 1.5;
     public static final double kPYController = 1.5;
-    public static final double kPThetaController = 3; 
+    public static final double kPThetaController = 3;
 
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
         new TrapezoidProfile.Constraints(
@@ -201,6 +201,9 @@ public final class Constants {
             kMaxAngularAccelerationRadiansPerSecondSquared);
 
     public static final double kAutoSpeedMetersPerSecond = kMaxSpeedMetersPerSecond - .25;
+
+    public static final TrapezoidProfile.Constraints kXControllerConstraints = new TrapezoidProfile.Constraints(kAutoSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared);
+    public static final TrapezoidProfile.Constraints kYControllerConstraints = new TrapezoidProfile.Constraints(kAutoSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared);
 
     // 1
     public static TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
@@ -266,7 +269,6 @@ public final class Constants {
     public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
     public static final double kStageHeightInches = 47.5;
 
-    
   }
 
   public static final class IntakeConstants {

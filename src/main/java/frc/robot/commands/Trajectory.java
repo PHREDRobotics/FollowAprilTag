@@ -58,7 +58,7 @@ public class Trajectory extends Command{
     waypoints.add(start);
     waypoints.add(end);
 
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+    TrajectoryConfig config = new TrajectoryConfig(1, .5);
 
     var trajectory = TrajectoryGenerator.generateTrajectory(
         waypoints,
