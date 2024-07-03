@@ -8,6 +8,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveJoystickCmd;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -86,17 +88,21 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    aButton.onTrue(new SwerveControllerCommand(
-        swerveSubsystem.getGoToTrajectory(
+    var trajectory = swerveSubsystem.getGoToTrajectory(
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(1, 0, Rotation2d.fromDegrees(45))),
+            new Pose2d(1, 0, Rotation2d.fromDegrees(45)));
+
+    aButton.onTrue(new SequentialCommandGroup(
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+      new SwerveControllerCommand(trajectory,
         swerveSubsystem::getPose,
         DriveConstants.kDriveKinematics,
         swerveSubsystem.xController,
         swerveSubsystem.yController,
         swerveSubsystem.thetaController,
         swerveSubsystem::setModuleStates,
-        swerveSubsystem));
+        swerveSubsystem),
+      new InstantCommand(() -> swerveSubsystem.stopModules())));
   }
 
   /**

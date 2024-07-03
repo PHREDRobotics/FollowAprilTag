@@ -74,6 +74,20 @@ public class VisionSubsystem extends SubsystemBase {
     //36=32
     //47.8~=49.75
   }
+  public double getRoughTargetDistance() {
+    double angleToGoalDegrees = VisionConstants.kLimelightMountAngleDegrees + ty;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    double hyp = VisionConstants.kAreaToCentimeters / ta;
+    double d = hyp * Math.cos(angleToGoalRadians);
+    return d;
+  }
+public double getTargetArea(){
+  return ta;
+}
+
+public double getTargetXDegrees(){
+  return tx;
+}
 
   public void goToDistance(double distance) {
 
@@ -120,6 +134,7 @@ public class VisionSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Limelight y value.", ty);
     SmartDashboard.putNumber("Limelight x value.", tx);
     SmartDashboard.putNumber("Estimated Distance", getTargetDistance());
+    SmartDashboard.putNumber("Estimated Rough Distance", getRoughTargetDistance());
     //SmartDashboard.putNumber("Limelight v value.", tv);
     SmartDashboard.putBoolean("Is the target in range?", m_LimelightHasValidTarget);
     SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);

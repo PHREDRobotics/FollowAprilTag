@@ -189,7 +189,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
     public static final double kMaxAngularSpeedRadiansPerSecond = //
         DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
     public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
     public static final double kPXController = 1.5;
     public static final double kPYController = 1.5;
@@ -268,7 +268,7 @@ public final class Constants {
     public static final double kAmpOrSourceHeightInches = 48.5;
     public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
     public static final double kStageHeightInches = 47.5;
-
+    public static final double kAreaToCentimeters = 150;
   }
 
   public static final class IntakeConstants {
